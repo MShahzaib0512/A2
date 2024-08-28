@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block content %}
+  <style>
+    .container {
+      max-width: 800px;
+      width: 90%;
+      padding: 2em;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-top: 80px;
+    }
+
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 0.5em;
+    }
+
+    h2 {
+      color: #3498db;
+      margin-top: 1em;
+    }
+
+    p {
+      margin: 0.5em 0;
+      line-height: 1.6;
+    }
+
+    .highlight {
+      font-weight: bold;
+      color: #e67e22;
+    }
+  </style>
+    <nav>
+      <div><a href="{% url 'banks:index' %}" class="nav-item">Home</a></div>
+      <div>
+        <a href="#" class="nav-item">About</a>
+        <a href="{% url 'banks:accounts' %}" class="nav-item">Accounts</a>
+      </div>
+    </nav>
+
+    <div class="container">
+      <h1>About Us</h1>
+      <p>
+        Welcome to <span class="highlight">Bank Management System</span>, your go-to platform for managing banks and their branches with ease.
+      </p>
+      <p>
+        Our mission is to simplify the management of banking institutions, allowing users to seamlessly add and manage banks and their branches. Whether you are a bank manager or an administrator, our platform offers a user-friendly interface and powerful tools to help you maintain accurate records and optimize branch operations.
+      </p>
+      <h2>What We Offer</h2>
+      <p>
+        <strong>Efficient Management:</strong> Easily add new banks and branches, update existing information, and keep your records organized.
+      </p>
+      <p>
+        <strong>Intuitive Interface:</strong> Our user-friendly design ensures that managing your bank's information is straightforward and hassle-free.
+      </p>
+      <p>
+        <strong>Secure and Reliable:</strong> We prioritize the security of your data with robust measures to protect your sensitive information.
+      </p>
+      <h2>Contact Us</h2>
+      <p>
+        For any inquiries or support, please reach out to our team at <a href="mailto:admin@enigmatix.io">admin@enigmatix.io</a>.
+      </p>
+    </div>
+{% endblock %}

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: 'Roboto', sans-serif;
+      }
+
+      .details-button {
+        background: #3498db;
+        color: #fff;
+        border: none;
+        padding: 0.75em 1.5em;
+        border-radius: 5px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+      }
+
+      .details-button:hover {
+        background-color: #2980b9;
+        transform: scale(1.05);
+      }
+
+      .details-button:focus {
+        outline: none;
+      }
+
+      /* Top Navigation Bar Styles */
+      nav {
+        background: #2c3e50;
+        color: #ecf0f1;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        width: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1000; /* Ensure nav stays on top */
+      }
+
+      nav .nav-item {
+        color: #ecf0f1;
+        text-decoration: none;
+        margin: 0 15px;
+        font-weight: 700;
+        transition: color 0.3s ease;
+      }
+
+      nav .nav-item:hover {
+        color: #3498db;
+      }
+
+      /* Content Styles */
+      .content {
+        margin-top: 60px; /* Space for top navigation */
+        padding: 25px;
+      }
+
+      .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px; /* Space between cards */
+        justify-content: center; /* Center cards horizontally */
+        align-items: center; /* Center cards vertically */
+      }
+
+      .card {
+        background: #fff;
+        padding: 1.5em;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 300px;
+        flex: 1 1 calc(33.333% - 40px); /* Adjust to 33% for 3 cards per row with space */
+        margin: 10px;
+        text-align: left;
+        box-sizing: border-box;
+      }
+
+      .card h1 {
+        font-size: 1.5em;
+        margin-bottom: 0.5em;
+      }
+
+      .card p {
+        margin-bottom: 0.5em;
+      }
+
+      .card p strong {
+        font-weight: 700;
+      }
+
+      .card span {
+        display: block;
+        margin-top: 0.25em;
+        color: #555;
+      }
+      .link {
+        text-decoration: none;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="#" class="nav-item">Home</a>
+      <div>
+        <a href="{% url 'banks:about' %}" class="nav-item">About</a>
+        <a href="{% url 'banks:accounts' %}" class="nav-item">Accounts</a>
+      </div>
+    </nav>
+
+    <div class="content">
+      <div class="card-container">
+        {% for i in banks %}
+        <div class="card show">
+          <h1>{{ i.name }}</h1>
+          <p><strong>Description:</strong> <span>{{ i.description }}</span></p>
+          <p><strong>Swift Code:</strong> <span>{{ i.swift_code }}</span></p>
+          <p><strong>Inst Number:</strong> <span>{{ i.inst_num }}</span></p>
+          <button class="details-button">
+            <a href="{% url 'banks:details' i.bank_id %}" class="link"
+              >Details</a
+            >
+          </button>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <script>
+      window.onload = () => {
+        document.getElementById('card')?.classList.add('show');
+      };
+    </script>
+  </body>
+</html>

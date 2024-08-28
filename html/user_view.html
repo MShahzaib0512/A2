@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User View</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        font-family: 'Roboto', sans-serif;
+        background: #f4f7f6;
+        color: #333;
+        display: flex;
+        flex-direction: row; /* Change to row for side navigation */
+        min-height: 100vh;
+      }
+
+      nav {
+        width: 100%;
+        background-color: #2c3e50;
+        padding: 1em 2em;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background-color 0.3s ease;
+      }
+
+      nav:hover {
+        background-color: #34495e;
+      }
+
+      .side-nav {
+        width: 250px; /* Width of the side nav */
+        background-color: #2c3e50;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh; /* Full height of the viewport */
+        padding-top: 60px; /* Space below the fixed header */
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: background-color 0.3s ease;
+      }
+
+      .side-nav a {
+        color: #ecf0f1;
+        text-decoration: none;
+        margin: 15px 0;
+        font-weight: 700;
+        transition: color 0.3s ease;
+        width: 100%;
+        text-align: center;
+        padding: 10px;
+        display: block;
+      }
+
+      .side-nav a:hover {
+        color: #3498db;
+        background-color: #34495e;
+      }
+
+      .card {
+        background: #fff;
+        padding: 2em;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        width: calc(100% - 270px); /* Adjust width to account for side nav */
+        margin: 25px auto;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+        transform: scale(0.9);
+        opacity: 0;
+        height: max-content;
+      }
+
+      .card.show {
+        opacity: 1;
+      }
+
+      .form-group {
+        margin-bottom: 1em;
+        text-align: left;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5em;
+        font-weight: 700;
+      }
+
+      .form-group input {
+        width: 90%;
+        padding: 0.75em;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1em;
+        transition: border-color 0.3s ease;
+      }
+
+      .form-group input:focus {
+        border-color: #3498db;
+        outline: none;
+      }
+
+      .submit-button {
+        background: #3498db;
+        color: #fff;
+        border: none;
+        padding: 0.75em 1.5em;
+        border-radius: 5px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+      }
+
+      .submit-button:hover {
+        background-color: #2980b9;
+        transform: scale(1.05);
+      }
+
+      .submit-button:focus {
+        outline: none;
+      }
+
+      .link {
+        text-decoration: none;
+        color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="side-nav">
+      <a href="{% url 'accounts:signout_html' %}" class="nav-item">Home</a>
+      <a href="{% url 'accounts:signout' %}" class="nav-item">Logout</a>
+      <a href="{% url 'banks:AddBank' %}" class="nav-item">Add Bank</a>
+      <a href="{% url 'banks:user_view' %}" class="nav-item">View Profile</a>
+    </div>
+
+    <div class="card show">
+      <h1>User Profile</h1>
+      <p>
+        <strong>First Name:</strong> <span id="first-name">Loading...</span>
+      </p>
+      <p><strong>Last Name:</strong> <span id="last-name">Loading...</span></p>
+      <p><strong>Username:</strong> <span id="username">Loading...</span></p>
+      <p><strong>Email:</strong> <span id="email">Loading...</span></p>
+      <a href="{% url 'banks:edit' %}" class="submit-button link"
+        >Edit Profile</a
+      >
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        fetch(`{% url 'banks:view' %}`)
+          .then((response) => response.json())
+          .then((data) => {
+            // Update the HTML with the data received
+            const { first_name, last_name, username, email } = data;
+            console.log(first_name, last_name, username, email);
+            document.getElementById('first-name').textContent = first_name;
+            document.getElementById('last-name').textContent = last_name;
+            document.getElementById('username').textContent = username;
+            document.getElementById('email').textContent = email;
+          })
+          .catch((error) => console.error('Error fetching data:', error));
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,65 @@
+{% extends 'base.html' %} {% block content %}
+<style>
+  .card h3 {
+    margin-top: 0;
+  }
+
+  .card p {
+    margin: 1em 0;
+  }
+
+  .card button {
+    background: #3498db;
+    color: #fff;
+    border: none;
+    padding: 0.75em 1.5em;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+
+  .main-content {
+    display: flex;
+    gap: 2em;
+  }
+  .card button:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
+  }
+
+  .card button:focus {
+    outline: none;
+  }
+  .card button a {
+    color: #fff; /* Ensure link text inside button is also white */
+    text-decoration: none; /* Remove underline from link */
+  }
+</style>
+<nav>
+  <div><a href="{% url 'banks:index' %}" class="nav-item">Home</a></div>
+  <div>
+    <a href="{% url 'banks:about' %}" class="nav-item">About</a>
+  </div>
+</nav>
+
+<div class="main-content">
+  <div class="card" id="card1">
+    <h3>Don't Have an Account?</h3>
+    <p>Sign up to join our community and enjoy exclusive features.</p>
+    <button><a href="{% url 'accounts:signup' %}">Signup</a></button>
+  </div>
+  <div class="card" id="card2">
+    <h3>Already Have an Account?</h3>
+    <p>Log in to access your profile and settings. Signup is required</p>
+    <button><a href="{% url 'accounts:signin' %}">log In</a></button>
+  </div>
+</div>
+
+<script>
+  window.onload = () => {
+    document.getElementById('card1').classList.add('show');
+    document.getElementById('card2').classList.add('show');
+  };
+</script>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'base.html' %} {% block content %}
+<nav>
+  <div><a href="{% url 'banks:index' %}" class="nav-item">Home</a></div>
+  <div>
+    <a href="{% url 'banks:accounts' %}" class="nav-item">Accounts</a>
+  </div>
+</nav>
+
+<div class="card" id="card">
+  <h2>Registration Form</h2>
+  <form action="{% url 'accounts:signup' %}" method="POST">
+    <div class="container mt-4">
+      {% if messages %} {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}" role="alert">
+        {{ message }}
+      </div>
+      {% endfor %} {% endif %}
+    </div>
+    <div class="form-group">
+      <label for="first-name">First Name</label>
+      <input type="text" id="first-name" name="fname" />
+    </div>
+    <div class="form-group">
+      <label for="last-name">Last Name</label>
+      <input type="text" id="last-name" name="lname" />
+    </div>
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="uname" required />
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" />
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="pass1" required />
+    </div>
+    <div class="form-group">
+      <label for="confirm-password">Confirm Password</label>
+      <input type="password" id="confirm-password" name="pass2" required />
+    </div>
+    <button type="submit" class="submit-button">Register</button>
+  </form>
+  <hr />
+  <a class="link" href="{% url 'accounts:signin' %}"
+    >Already have an account?</a
+  >
+</div>
+
+<script>
+  window.onload = () => {
+    document.getElementById('card').classList.add('show');
+  };
+</script>
+{% endblock %}

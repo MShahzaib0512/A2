@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+    <nav>
+      <div><a href="{% url 'banks:index' %}" class="nav-item">Home</a></div>
+      <div>
+        <a href="{% url 'banks:accounts' %}" class="nav-item">Accounts</a>
+      </div>
+    </nav>
+
+    <div class="card" id="card">
+      <h2>Login</h2>
+      <form action="{% url 'accounts:signin' %}" method="POST">
+        <div class="container mt-4">
+          {% if messages %} {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}" role="alert">
+            {{ message }}
+          </div>
+          {% endfor %} {% endif %}
+        </div>
+        <div class="form-group">
+          <label for="username">USERNAME</label>
+          <input type="text" id="username" name="uname" required />
+        </div>
+        <div class="form-group">
+          <label for="password">PASSWORD</label>
+          <input type="password" id="password" name="pass1" required />
+        </div>
+        <button type="submit" class="submit-button">Login</button>
+      </form>
+      <hr />
+      <a class="link" href="{% url 'password_reset' %}">forget password?</a>
+    </div>
+
+    <script>
+      window.onload = () => {
+        document.getElementById('card').classList.add('show');
+      };
+    </script>
+{% endblock %}

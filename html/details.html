@@ -1,0 +1,351 @@
+{% if user.is_authenticated %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Data</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: auto; /* Ensure scrolling is enabled */
+      }
+
+      body {
+        font-family: 'Roboto', sans-serif;
+        background: #f4f7f6;
+        color: #333;
+        display: flex;
+        min-height: 100vh;
+      }
+
+      .side-nav {
+        width: 250px;
+        background-color: #2c3e50;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        padding-top: 60px;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: background-color 0.3s ease;
+      }
+
+      .side-nav a {
+        color: #ecf0f1;
+        text-decoration: none;
+        margin: 15px 0;
+        font-weight: 700;
+        transition: color 0.3s ease, background-color 0.3s ease;
+        width: 100%;
+        text-align: center;
+        padding: 10px;
+        display: block;
+        border-radius: 4px;
+      }
+
+      .side-nav a:hover {
+        color: #3498db;
+        background-color: #34495e;
+      }
+
+      .content {
+        margin-left: 250px; /* Account for side nav width */
+        padding: 25px;
+        flex: 1;
+        overflow-y: auto; /* Allow vertical scrolling */
+        height: calc(100vh - 60px); /* Adjust for potential header height */
+        box-sizing: border-box;
+      }
+
+      .card {
+        background: #fff;
+        padding: 1.5em;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 100%;
+        margin: auto;
+        text-align: left;
+        box-sizing: border-box;
+      }
+
+      .card h1 {
+        font-size: 1.8em;
+        margin-bottom: 0.5em;
+      }
+
+      .card p {
+        margin-bottom: 0.5em;
+      }
+
+      .card p strong {
+        font-weight: 700;
+      }
+
+      .card span {
+        display: block;
+        margin-top: 0.25em;
+        color: #555;
+      }
+
+      .branch-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      .branch-table th,
+      .branch-table td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+      }
+
+      .branch-table th {
+        background: #2c3e50;
+        color: #ecf0f1;
+      }
+
+      .branch-table tr:nth-child(even) {
+        background: #f2f2f2;
+      }
+
+      .branch-table td a {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .branch-table td a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="side-nav">
+      <a href="{% url 'accounts:signout_html' %}" class="nav-item">Home</a>
+      <a href="{% url 'accounts:signout' %}" class="nav-item">Logout</a>
+      <a href="{% url 'banks:AddBank' %}" class="nav-item">Add Bank</a>
+      <a href="{% url 'banks:user_view' %}" class="nav-item">View Profile</a>
+    </div>
+
+    <div class="content">
+      <div class="card">
+        <h1>{{ bank.name }}</h1>
+        <p><strong>Description:</strong> <span>{{ bank.description }}</span></p>
+        <p><strong>Swift Code:</strong> <span>{{ bank.swift_code }}</span></p>
+        <p><strong>Inst Number:</strong> <span>{{ bank.inst_num }}</span></p>
+        <h2>Branches</h2>
+        <table class="branch-table">
+          <thead>
+            <tr>
+              <th>Branch Name</th>
+              <th>Address</th>
+              <th>Transit Number</th>
+              <th>Email</th>
+              <th>Capacity</th>
+              <th>Edit</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for branch in branches %}
+            <tr>
+              <td>{{ branch.name }}</td>
+              <td>{{ branch.address }}</td>
+              <td>{{ branch.transit_num }}</td>
+              <td>{{ branch.email }}</td>
+              <td>{{ branch.capacity }}</td>
+              <td>
+                <a href="{% url 'banks:Edit_branch' branch.branch_id %}"
+                  >Edit</a
+                >
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="6">No branches available.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>
+
+{% else %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bank Details</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: 'Roboto', sans-serif;
+      }
+      .details-button {
+        background: #3498db;
+        color: #fff;
+        border: none;
+        padding: 0.75em 1.5em;
+        border-radius: 5px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+      }
+
+      .details-button:hover {
+        background-color: #2980b9;
+        transform: scale(1.05);
+      }
+
+      .details-button:focus {
+        outline: none;
+      }
+
+      /* Top Navigation Bar Styles */
+      nav {
+        background: #2c3e50;
+        color: #ecf0f1;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        width: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1000; /* Ensure nav stays on top */
+      }
+
+      nav .nav-item {
+        color: #ecf0f1;
+        text-decoration: none;
+        margin: 0 15px;
+        font-weight: 700;
+        transition: color 0.3s ease;
+      }
+
+      nav .nav-item:hover {
+        color: #3498db;
+      }
+
+      /* Content Styles */
+      .content {
+        margin-top: 60px; /* Space for top navigation */
+        padding: 25px;
+      }
+
+      .card {
+        background: #fff;
+        padding: 1.5em;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 800px;
+        margin: auto;
+        text-align: left;
+        box-sizing: border-box;
+      }
+
+      .card h1 {
+        font-size: 1.5em;
+        margin-bottom: 0.5em;
+      }
+
+      .card p {
+        margin-bottom: 0.5em;
+      }
+
+      .card p strong {
+        font-weight: 700;
+      }
+
+      .card span {
+        display: block;
+        margin-top: 0.25em;
+        color: #555;
+      }
+
+      /* Branch Table Styles */
+      .branch-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      .branch-table th,
+      .branch-table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+      }
+
+      .branch-table th {
+        background: #2c3e50;
+        color: #ecf0f1;
+      }
+
+      .branch-table tr:nth-child(even) {
+        background: #f2f2f2;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="{% url 'banks:index' %}" class="nav-item">Home</a>
+      <div>
+        <a href="{% url 'banks:about' %}" class="nav-item">About</a>
+        <a href="{% url 'banks:accounts' %}" class="nav-item">Accounts</a>
+      </div>
+    </nav>
+
+    <div class="content">
+      <div class="card">
+        <h1>{{ bank.name }}</h1>
+        <p><strong>Description:</strong> <span>{{ bank.description }}</span></p>
+        <p><strong>Swift Code:</strong> <span>{{ bank.swift_code }}</span></p>
+        <p><strong>Inst Number:</strong> <span>{{ bank.inst_num }}</span></p>
+        <h2>Branches</h2>
+        <table class="branch-table">
+          <thead>
+            <tr>
+              <th>Branch Name</th>
+              <th>Address</th>
+              <th>Transit Number</th>
+              <th>Email</th>
+              <th>Capacity</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for branch in branches %}
+            <tr>
+              <td>{{ branch.name }}</td>
+              <td>{{ branch.address }}</td>
+              <td>{{ branch.transit_num }}</td>
+              <td>{{ branch.email }}</td>
+              <td>{{ branch.capacity }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="3">No branches available.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% endif %}
+      </div>
+    </div>
+  </body>
+</html>
