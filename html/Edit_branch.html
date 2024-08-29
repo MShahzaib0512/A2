@@ -89,7 +89,7 @@
       }
 
       .form-group input {
-        width: 90%;
+        width: 97%;
         padding: 0.75em;
         border: 1px solid #ddd;
         border-radius: 5px;
@@ -144,7 +144,7 @@
       <div class="card" id="card">
         <h2>Edit Data</h2>
         <form
-          action="{% url 'banks:Edit_branch' branch.branch_id %}"
+          action="{% url 'banks:submit_Edit_branch' branch.branch_id %}"
           method="POST"
         >
           <div class="container mt-4">

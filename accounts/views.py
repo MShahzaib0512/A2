@@ -74,8 +74,19 @@ def submit_signin(request):
   pass1=request.POST['pass1']
   user=authenticate(username=uname,password=pass1)
   if user is not None:
-   login(request,user)
-   return redirect('accounts:signout_html')
+   site=get_current_site(request)
+   Subject="Authentication E-mail"
+   message=render_to_string('authentication_mail.html',{
+     'user':user.first_name,
+     'domain':site.domain,
+     'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+     'token':default_token_generator.make_token(user),
+   })
+   from_mail=settings.EMAIL_HOST_USER
+   to_user=[user.email]
+   send_mail(Subject,message,from_mail,to_user,fail_silently=True)
+   messages.info(request,'An Email was send to your email please confirm that its you try to login')
+   return render(request,'signin.html')
   else:
    messages.error(request,'Username or password is invalid')
    return redirect('accounts:signin')
@@ -95,7 +106,6 @@ def activate(request, uidb64, token):
   if myuser is not None and generate_token.check_token(myuser , token):
     myuser.is_active=True
     myuser.save()
-    login(request ,myuser)
     return redirect('accounts:signin')
   else:
     return render(request ,'activation_failed.html')
@@ -131,3 +141,16 @@ def signout_html(request):
   user = request.user
   banks= Bank.objects.filter(admin = user)
   return render(request, 'signout.html',{'banks':banks})  
+def user_activate(request,uidb64,token):
+  try:
+    uid=urlsafe_base64_decode(force_str(uidb64))
+    user=User.objects.get(pk=uid)
+  except(TypeError,ValueError,User.DoesNotExist):
+    user=None
+    
+  if user is not None and default_token_generator.check_token(user,token):
+    login(request,user)
+    return redirect('accounts:signout_html')
+  else:
+    return render(request,'activation_failed.html')
+    

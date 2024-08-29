@@ -137,7 +137,7 @@
     <div class="content">
       <div class="card" id="card">
         <h2>Edit Data</h2>
-        <form action="{% url 'banks:edit' %}" method="POST">
+        <form action="{% url 'banks:submit_edit' %}" method="POST">
           <div class="container mt-4">
             {% if messages %} {% for message in messages %}
             <div class="alert alert-{{ message.tags }}" role="alert">

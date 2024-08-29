@@ -16,5 +16,6 @@ urlpatterns = [
     path('/reset' ,views.reset , name='reset'),
     path('/submit_reset' ,views.submit_reset , name='submit_reset'),
     path('/activate/<uidb64>/<token>', views.activate, name = 'activate'),
+    path('/user_activate/<uidb64>/<token>', views.user_activate, name = 'user_activate'),
 ]
 
