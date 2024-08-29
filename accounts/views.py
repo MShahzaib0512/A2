@@ -12,14 +12,16 @@ from django.core.mail import send_mail
 from A2 import settings
 from django.contrib.auth.decorators import login_required
 from banks.models import Bank
+from django.views.decorators.http import require_POST
 
 
 # Create your views here.
 
 def accounts(request):
  return render(request , 'accounts.html')
-def signup(request):
- if request.method == 'POST':
+@require_POST
+def submit_signup(request):
+#  if request.method == 'POST':
   uname = request.POST['uname']
   fname = request.POST['fname']
   lname = request.POST['lname']
@@ -50,24 +52,24 @@ def signup(request):
    myuser.save()
    
   #  confermation Email
-  site = get_current_site(request)
-  
-  subject = "Confirm your E-mail Address"
-  message = render_to_string('confermation_Email.html',{
-    'user' : myuser.first_name,
-    'domain':site.domain,
-    'uid' : urlsafe_base64_encode(force_bytes(myuser.pk)),
-    'token': generate_token.make_token(myuser),
-  })
-  from_mail = settings.EMAIL_HOST_USER 
-  to_list = [myuser.email]
-  send_mail(subject, message, from_mail, to_list, fail_silently = True)
-  messages.info(request, "Your account have been created successfully conferm yoyr email to activate your account ")
-  return redirect('accounts:signin')
-  
- return render(request , 'signup.html')
-def signin(request):
- if request.method=='POST':
+   site = get_current_site(request)
+    
+   subject = "Confirm your E-mail Address"
+   message = render_to_string('confermation_Email.html',{
+      'user' : myuser.first_name,
+      'domain':site.domain,
+      'uid' : urlsafe_base64_encode(force_bytes(myuser.pk)),
+      'token': generate_token.make_token(myuser),
+    })
+   from_mail = settings.EMAIL_HOST_USER 
+   to_list = [myuser.email]
+   send_mail(subject, message, from_mail, to_list, fail_silently = True)
+   messages.info(request, "Your account have been created successfully conferm yoyr email to activate your account ")
+   return redirect('accounts:signin')
+def signup(request):
+  return render (request,'signup.html')
+@require_POST
+def submit_signin(request):
   uname=request.POST['uname']
   pass1=request.POST['pass1']
   user=authenticate(username=uname,password=pass1)
@@ -77,8 +79,8 @@ def signin(request):
   else:
    messages.error(request,'Username or password is invalid')
    return redirect('accounts:signin')
-  
- return render(request , 'signin.html')
+def signin(request):
+  return render(request, 'signin.html')
 def signout(request):
  logout(request)
  banks = Bank.objects.all()
@@ -100,8 +102,8 @@ def activate(request, uidb64, token):
 def password_reset_complete(request):
   return render(request , 'password_reset_complete.html')
 @login_required
-def reset(request):
-  if request.method == 'POST':
+@require_POST
+def submit_reset(request):
     user = request.user
     uname = request.POST['uname']
     pass1 = request.POST['pass1']
@@ -120,9 +122,10 @@ def reset(request):
         return redirect('accounts:signin')
       except:
         messages.error(request, 'Username is in-correct')
-        return redirect('accounts:reset') 
-  else:
-    return render(request, 'reset.html') 
+        return redirect('accounts:reset')
+@login_required 
+def reset(request):
+  return render(request,'reset.html')
 @login_required
 def signout_html(request):
   user = request.user
