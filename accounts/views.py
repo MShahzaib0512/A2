@@ -13,6 +13,7 @@ from A2 import settings
 from django.contrib.auth.decorators import login_required
 from banks.models import Bank
 from django.views.decorators.http import require_POST
+from .decorators import owner
 
 
 # Create your views here.
@@ -137,9 +138,8 @@ def submit_reset(request):
 def reset(request):
   return render(request,'reset.html')
 @login_required
-def signout_html(request):
-  user = request.user
-  banks= Bank.objects.filter(admin = user)
+@owner
+def signout_html(request ,banks=None):
   return render(request, 'signout.html',{'banks':banks})  
 def user_activate(request,uidb64,token):
   try:
