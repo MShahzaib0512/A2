@@ -14,7 +14,8 @@ from django.contrib.auth.decorators import login_required
 from banks.models import Bank
 from django.views.decorators.http import require_POST
 from .decorators import owner
-
+from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
+from django.urls import reverse_lazy
 
 # Create your views here.
 
@@ -110,8 +111,6 @@ def activate(request, uidb64, token):
     return redirect('accounts:signin')
   else:
     return render(request ,'activation_failed.html')
-def password_reset_complete(request):
-  return render(request , 'password_reset_complete.html')
 @login_required
 @require_POST
 def submit_reset(request):
@@ -154,3 +153,22 @@ def user_activate(request,uidb64,token):
   else:
     return render(request,'activation_failed.html')
     
+def password_reset(request):
+    return PasswordResetView.as_view(
+        template_name='reset/password_reset_form.html',
+        email_template_name='reset/password_reset_email.html', 
+        success_url=reverse_lazy('accounts:password_reset_done')
+    )(request)
+def password_reset_done(request):
+    return PasswordResetDoneView.as_view(
+        template_name='reset/password_reset_done.html'
+    )(request)
+def password_reset_confirm(request, uidb64, token):
+    return PasswordResetConfirmView.as_view(
+        template_name='reset/password_reset_confirm.html',
+        success_url=reverse_lazy('accounts:password_reset_complete')
+    )(request, uidb64=uidb64, token=token)
+def password_reset_complete(request):
+    return PasswordResetCompleteView.as_view(
+        template_name='reset/password_reset_complete.html'
+    )(request)
