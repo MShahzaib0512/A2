@@ -9,6 +9,7 @@ class Bank(models.Model):
  swift_code = models.CharField(max_length=100)
  admin = models.ForeignKey(User, on_delete=models.CASCADE)
  
+ 
 class Branch(models.Model):
    branch_id = models.AutoField(primary_key=True)  
    name = models.CharField(max_length=100)

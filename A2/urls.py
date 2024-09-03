@@ -22,3 +22,6 @@ urlpatterns = [
     path('accounts', include('accounts.urls',namespace='accounts') ),
     path('admin/', admin.site.urls),
 ]
+admin.site.site_header='BANKS MANAGEMENT'
+admin.site.site_title='BANKS MANAGEMENT'
+admin.site.index_title='Banks Management Administration'
