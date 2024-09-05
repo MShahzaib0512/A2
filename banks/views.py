@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST
 # Create your views here.
 def index(request):
  bank = Bank.objects.all()
- return render(request,"index.html",{'banks':bank})
+ return render(request,"index.html",{'banks':bank, 'content':request.show_registration_popup})
 @login_required
 @require_POST
 def submit_Edit_branch(request,branch_id): 

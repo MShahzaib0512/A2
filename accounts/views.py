@@ -18,9 +18,8 @@ from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, 
 from django.urls import reverse_lazy
 
 # Create your views here.
-
 def accounts(request):
- return render(request , 'accounts.html')
+    return render(request, 'accounts.html')
 @require_POST
 def submit_signup(request):
 #  if request.method == 'POST':

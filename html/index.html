@@ -3,15 +3,72 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
+    <!-- <link rel="stylesheet" href="./style.css" /> -->
+    <title>Document</title>
     <style>
       body {
         font-family: 'Roboto', sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
       }
+.alert-container {
+  background-color: #f4f4f4;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  position: absolute;
+  top: 60px;
+  right: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 300px; /* Adjust width as needed */
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #333;
+}
+
+.close-button:hover {
+  color: #007bff;
+}
+
+.alert-text {
+  font-size: 16px;
+  color: #333;
+}
+
+.login {
+  color: black;
+}
+
+.alert-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  text-decoration: none;
+  margin: 10px 0;
+}
+
+.alert-button:hover {
+  background-color: #0056b3;
+}
+
 
       .details-button {
         background: #3498db;
@@ -33,7 +90,6 @@
         outline: none;
       }
 
-      /* Top Navigation Bar Styles */
       nav {
         background: #2c3e50;
         color: #ecf0f1;
@@ -46,7 +102,7 @@
         width: 100%;
         top: 0;
         left: 0;
-        z-index: 1000; /* Ensure nav stays on top */
+        z-index: 1000;
       }
 
       nav .nav-item {
@@ -61,18 +117,17 @@
         color: #3498db;
       }
 
-      /* Content Styles */
       .content {
-        margin-top: 60px; /* Space for top navigation */
+        margin-top: 80px; /* Space for top navigation and alert */
         padding: 25px;
       }
 
       .card-container {
         display: flex;
         flex-wrap: wrap;
-        gap: 20px; /* Space between cards */
-        justify-content: center; /* Center cards horizontally */
-        align-items: center; /* Center cards vertically */
+        gap: 20px;
+        justify-content: center;
+        align-items: center;
       }
 
       .card {
@@ -81,7 +136,7 @@
         border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         max-width: 300px;
-        flex: 1 1 calc(33.333% - 40px); /* Adjust to 33% for 3 cards per row with space */
+        flex: 1 1 calc(33.333% - 40px);
         margin: 10px;
         text-align: left;
         box-sizing: border-box;
@@ -105,6 +160,7 @@
         margin-top: 0.25em;
         color: #555;
       }
+
       .link {
         text-decoration: none;
         color: white;
@@ -112,6 +168,22 @@
     </style>
   </head>
   <body>
+    {% if content %}
+{% if content %}
+<div class="alert-container">
+  <button class="close-button">&times;</button>
+  <div class="alert-text">
+    <h1>New to our site?</h1>
+    <p>Register yourself to get updates!</p>
+  </div>
+  <a href="{% url 'accounts:signup' %}" class="alert-button"> Register </a>
+  <p>Already have an account?</p>
+  <a class="login" href="{% url 'accounts:signin' %}">Login</a>
+</div>
+{% endif %}
+
+    {% endif %}
+
     <nav>
       <a href="#" class="nav-item">Home</a>
       <div>
@@ -139,9 +211,18 @@
     </div>
 
     <script>
-      window.onload = () => {
-        document.getElementById('card')?.classList.add('show');
-      };
+      document.addEventListener('DOMContentLoaded', function() {
+  const closeButton = document.querySelector('.close-button');
+  if (closeButton) {
+    closeButton.addEventListener('click', function() {
+      const alertContainer = document.querySelector('.alert-container');
+      if (alertContainer) {
+        alertContainer.style.display = 'none';
+      }
+    });
+  }
+});
+
     </script>
   </body>
 </html>
