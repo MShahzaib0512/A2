@@ -1,3 +1,4 @@
+from django.dispatch import receiver
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -5,6 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from .models import Bank,Branch
 from django.views.decorators.http import require_POST
+from django.db.models.signals import post_save
 # Create your views here.
 def index(request):
  bank = Bank.objects.all()
@@ -56,8 +58,7 @@ def submit_AddBank(request):
   inst_num = request.POST['inst_num']
   swift_code = request.POST['swift_code']
   
-  bank =Bank.objects.create(name = name, description=description ,inst_num=inst_num ,swift_code=swift_code,admin=user)
-  bank.save()
+  Bank.objects.create(name = name, description=description ,inst_num=inst_num ,swift_code=swift_code,admin=user)
   messages.success(request ,"bank has been created successfully")
   return redirect('banks:AddBank')
 @login_required
@@ -109,3 +110,10 @@ def details(request,bank_id):
   bank=get_object_or_404(Bank,bank_id=bank_id)
   branch=bank.branches.all()
   return render(request, "details.html",{'bank':bank, 'branches':branch})
+
+@receiver(post_save,sender=Bank)
+def send(sender,*args, **kwargs):
+  print("Bank saved")
+@receiver(post_save,sender=Bank)
+def send(sender,*args, **kwargs):
+  print("Bank edited")
